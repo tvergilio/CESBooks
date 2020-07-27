@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Transactions
+{% endblock %}
+
+{% block main %}
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Transaction</th>
+          <th scope="col">Book</th>
+          <th scope="col">Price</th>
+          <th scope="col">Bought By</th>
+          <th scope="col">Staff</th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for row in transactions %}
+      <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+        <td>{{ row[2] }}</td>
+        <td>{{ row[3] }}</td>
+        <td>{{ row[4] }}</td>
+        <td>{{ row[5] }}</td>
+
+      </tr>
+    {% endfor %}
+      </tbody>
+    </table>
+
+
+{% endblock %}

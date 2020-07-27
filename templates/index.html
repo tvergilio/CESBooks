@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stock
+{% endblock %}
+
+{% block main %}
+
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Title </th>
+          <th scope="col">Level</th>
+          <th scope="col">Edition</th>
+          <th scope="col">ISBN</th>
+          <th scope="col">New Stock</th>
+          <th scope="col">Used Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for row in bookstock %}
+      <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+        <td>{{ row[2] }}</td>
+        <td>{{ row[3] }}</td>        
+        <td>{{ row[4] }}</td> 
+        <td>{{ row[5] }}</td> 
+      </tr>
+    {% endfor %}
+      </tbody>
+    </table>
+
+
+{% endblock %}

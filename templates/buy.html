@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+     Buy Books
+{% endblock %}
+
+{% block main %}
+    <form action="/buy" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="isbn" placeholder="ISBN" type="text" onkeyup="EnableDisable(isbn, student)">                    
+            <input type="checkbox" id="used" name="used" checked><label for="scales">Used</label>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="student" placeholder="Student's Name" type="text" onkeyup="EnableDisable(isbn, student)">
+        </div>
+        <button class="btn btn-primary" id = "submit" disabled = "true" type="submit">Buy Book</button>
+    </form>
+
+
+<script type="text/javascript">
+    function EnableDisable(isbn, student) {
+        //Reference the Button.
+        var btnSubmit = document.getElementById("submit");
+        //Verify the ISBN has 13 characters and the student name field is filled
+        if ((isbn.value.trim().length == 13) && (student.value.trim() != "")) {
+            btnSubmit.disabled = false;
+        } else {
+            btnSubmit.disabled = true;
+        }
+    };
+</script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sell Books
+{% endblock %}
+
+{% block main %}
+
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Title </th>
+          <th scope="col">Level</th>
+          <th scope="col">Edition</th>
+          <th scope="col">ISBN</th>
+          <th scope="col">New Stock</th>
+          <th scope="col">Used Stock</th>
+          <th scope="col">Price New</th>
+          <th scope="col">Price Used</th>          
+        </tr>
+      </thead>
+      <tbody>
+    {% for row in stocks %}
+      <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+        <td>{{ row[2] }}</td>
+        <td>{{ row[3] }}</td>        
+        <td>{{ row[4] }}</td> 
+        <td>{{ row[5] }}</td>
+        <td>{{ row[6] }}</td>        
+        <td>{{ row[7] }}</td> 
+      </tr>
+    {% endfor %}
+      </tbody>
+    </table>
+
+      </tbody>
+    </table>
+    
+        <form action="/sell" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="isbn" placeholder="ISBN" type="text" onkeyup="EnableDisable(isbn, student)">
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="number_to_sell" placeholder="1" type="number" value = "1">
+                    <input type="checkbox" id="used" name="used" checked><label for="scales">Used</label>
+        </div>
+                <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="student" placeholder="Student's Name" type="text" onkeyup="EnableDisable(isbn, student)">
+        </div>
+        <button class="btn btn-primary" id="submit" type="submit" disabled = true>Sell Book</button>
+    </form>
+
+<script type="text/javascript">
+    function EnableDisable(isbn, student) {
+        //Reference the Button.
+        var btnSubmit = document.getElementById("submit");
+        //Verify the ISBN has 13 characters and the student name field is filled
+        if ((isbn.value.trim().length == 13) && (student.value.trim() != "")) {
+            btnSubmit.disabled = false;
+        } else {
+            btnSubmit.disabled = true;
+        }
+    };
+</script>
+
+{% endblock %}

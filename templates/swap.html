@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Swap Books
+{% endblock %}
+
+{% block main %}
+
+    <form action="/swap" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="book_in" placeholder="Book Coming In" type="text" onkeyup="EnableDisable(book_in, book_out, student)">
+             <input type="checkbox" id="used" name="book_in_used" checked><label for="scales">Used</label>
+        </div>
+        
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="book_out" placeholder="Book Going Out" type="text" onkeyup="EnableDisable(book_in, book_out, student)">
+             <input type="checkbox" id="used" name="book_out_used" checked><label for="scales">Used</label>
+        </div>
+        
+                <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="student" placeholder="Student's Name" type="text"onkeyup="EnableDisable(book_in, book_out, student)">
+        </div>
+        <button class="btn btn-primary" id = "submit" disabled = "true" type="submit" >Swap Books</button>
+    </form>
+
+
+<script type="text/javascript">
+    function EnableDisable(book_in, book_out, student) {
+        //Reference the Button.
+        var btnSubmit = document.getElementById("submit");
+        //Verify both ISBNs have 13 characters and the student name field is filled
+        if ((book_in.value.trim().length == 13) && (book_in.value.trim().length == 13) && (student.value.trim() != "")) {
+            btnSubmit.disabled = false;
+        } else {
+            btnSubmit.disabled = true;
+        }
+    };
+</script>
+{% endblock %}
+
