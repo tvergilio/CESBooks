@@ -70,7 +70,7 @@ CREATE TABLE transactions
     book_id          text,
     price            real,
     student          text,
-    date             date DEFAULT (CURRENT_DATE)
+    date             timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 # ----
