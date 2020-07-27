@@ -19,6 +19,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):
+    db.execute("COMMIT;")
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
@@ -32,7 +33,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///finance.db")
+#'mysql://<your_username>:<your_mysql_password>@<your_mysql_hostname>/<your_database_name>'
+db = SQL("mysql://redyelruc:robisawanker@localhost:3306/finance")
 
 
 @app.route("/")
@@ -121,12 +123,11 @@ def register():
         if request.form.get("password") != request.form.get("confirm-password"):
             return apology("password and confirmation do not match", 403)
         # hash the password and create row in db
-        db.execute("INSERT INTO users(username, hash) VALUES (:username, :hash)",
-            username=request.form.get("username"), hash=generate_password_hash(request.form.get("password")))
+        db.execute("INSERT INTO users(username, hash) VALUES (:username, :hash)", username=request.form.get("username"),
+                   hash=generate_password_hash(request.form.get("password")))
 
         # make sure that the new user is logged in
         rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
-
         # set the session so we know who is logged in
         session["user_id"] = rows[0]["id"]
         return redirect("/")
@@ -177,7 +178,6 @@ def sell():
                     books_left = int(book_in_stock[0]["stock_new"]) - 1)
             db.execute("INSERT INTO transactions(transaction_type, user_id, book_id, price, date, student) VALUES (:trans, :user, :book, :price, :date, :student)",
                     trans=transaction, user=session["user_id"], book=isbn, price=(book_in_stock[0]["price_new"]), date=date.today(), student=student)
-
         flash("Sold!")
         return redirect("/")
 
