@@ -1,3 +1,4 @@
+CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] finance;
 USE finance;
 # ----
 # -- Drop table for users
