@@ -1,5 +1,5 @@
 import os
-import datetime
+from datetime import datetime
 
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
@@ -7,8 +7,9 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from datetime import date
 from helpers import apology, login_required
+import isbnlib
+
 
 # Configure application
 app = Flask(__name__)
@@ -54,7 +55,7 @@ def index():
 def transactions():
     """Show history of transactions"""
     # get transaction history
-    rows = db.execute("SELECT * FROM transactions ORDER BY date DESC")
+    rows = db.execute("SELECT * FROM transactions WHERE DATE(date) = CURDATE() ORDER BY date DESC")
     history =[]
     for row in rows:
         history.append([row['date'], row['transaction_type'], row['book_id'],
@@ -172,12 +173,12 @@ def sell():
             db.execute("UPDATE books SET stock_used = :books_left WHERE isbn = :isbn", isbn = isbn,
                     books_left = int(book_in_stock[0]["stock_used"]) - 1)
             db.execute("INSERT INTO transactions(transaction_type, user_id, book_id, price, date, student) VALUES (:trans, :user, :book, :price, :date, :student)",
-                        trans=transaction, user=session["user_id"], book=isbn, price=(book_in_stock[0]["price_used"]), date=date.today(), student=student)
+                        trans=transaction, user=session["user_id"], book=isbn, price=(book_in_stock[0]["price_used"]), date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'), student=student)
         else:
             db.execute("UPDATE books SET stock_new = :books_left WHERE isbn = :isbn", isbn = isbn,
                     books_left = int(book_in_stock[0]["stock_new"]) - 1)
             db.execute("INSERT INTO transactions(transaction_type, user_id, book_id, price, date, student) VALUES (:trans, :user, :book, :price, :date, :student)",
-                    trans=transaction, user=session["user_id"], book=isbn, price=(book_in_stock[0]["price_new"]), date=date.today(), student=student)
+                    trans=transaction, user=session["user_id"], book=isbn, price=(book_in_stock[0]["price_new"]), date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'), student=student)
         flash("Sold!")
         return redirect("/")
 
@@ -200,7 +201,7 @@ def buy():
             db.execute("UPDATE books SET stock_used = :books WHERE isbn = :isbn", isbn = isbn, books = book_in_stock[0]["stock_used"] + 1)        
             # record in transactions database
             db.execute("INSERT INTO transactions(transaction_type, user_id, book_id, price, date, student) VALUES (:trans, :user, :book, :price, :date, :student)",
-                            trans=transaction, user=session["user_id"], book=isbn, price= -10, date=date.today(), student=student)
+                            trans=transaction, user=session["user_id"], book=isbn, price= -10, date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'), student=student)
             flash("Bought!")
             return redirect("/")
         except IndexError:
@@ -239,9 +240,9 @@ def swap():
         
         #update the transactions table
         db.execute("INSERT INTO transactions(transaction_type, user_id, book_id, price, date, student) VALUES (:trans, :user, :book, :price, :date, :student)",
-                    trans="SWAP IN", user=session["user_id"], book=book_in, price=0, date=date.today(), student=student)
+                    trans="SWAP IN", user=session["user_id"], book=book_in, price=0, date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'), student=student)
         db.execute("INSERT INTO transactions(transaction_type, user_id, book_id, price, date, student) VALUES (:trans, :user, :book, :price, :date, :student)",
-                    trans="SWAP OUT", user=session["user_id"], book=book_out, price=0, date=date.today(), student=student)                    
+                    trans="SWAP OUT", user=session["user_id"], book=book_out, price=0, date=datetime.now().strftime('%Y-%m-%d %H:%M:%S'), student=student)
         flash('Swap completed')
         return redirect('/')
 
@@ -254,7 +255,22 @@ def add():
         # Display form for user to enter stock to search
         return render_template("add.html")
     else:
-        print("HERE")
+        isbn = request.form.get("isbn")
+        book_details = isbnlib.meta(isbn)
+        cover = isbnlib.cover(isbn)
+        book_details['cover']=cover['thumbnail']
+        if "ISBN-13" in book_details:
+            book_details['ISBN'] = book_details.pop("ISBN-13")
+        return render_template("addstock.html", **book_details)
+
+@app.route("/addstock", methods=["GET", "POST"])
+@login_required
+def addstock():
+    """Get stock quote."""
+    if request.method == "GET":
+        # Display form for user to enter stock to search
+        return render_template("add.html", book)
+    else:
         isbn = request.form.get("isbn")
         title = request.form.get("title")
         level = request.form.get("level")
@@ -264,10 +280,9 @@ def add():
         stock_new = request.form.get("stock_new")
         stock_used = request.form.get("stock_used")
         db.execute("INSERT INTO books(isbn, title, level, edition, stock_new, stock_used, price_new, price_used) VALUES(:isbn, :title, :level, :edition, :stock_new, :stock_used, :price_new, :price_used)",
-                    isbn = isbn, title=title, level=level, edition=edition, stock_new=stock_new, stock_used=stock_used, price_new=price_new, price_used = price_used)          
-        flash("Title added")  
+                    isbn = isbn, title=title, level=level, edition=edition, stock_new=stock_new, stock_used=stock_used, price_new=price_new, price_used = price_used)
+        flash("Title added")
         return redirect("/")
-
 
 
 def errorhandler(e):
