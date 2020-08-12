@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add New Title
+{% endblock %}
+
+{% block main %}
+    <form action="/addstock" method="post">
+        <img src="{{ cover}}" width="50" height="60">
+        <div class="form-group">
+            <label for="isbn">ISBN</label>
+            <input autocomplete="on" autofocus class="form-control" id ="isbn" name="isbn" value="{{ ISBN }}" type="text" >
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input autocomplete="off" autofocus class="form-control" id="title" name="title" placeholder="{{ Title }}" value="{{ Title }}" type="text">
+        </div>
+        <div class="form-group">
+            <label for="level">Level</label>
+            <input autocomplete="off" autofocus class="form-control" id="level" name="level" placeholder="Level" type="text">
+        </div>
+        <div class="form-group">
+            <label for="edition">Edition</label>
+            <input autocomplete="off" autofocus class="form-control" name="edition" placeholder="Edition" type="number">
+        </div>
+        <div class="form-group">
+            <label for="price_new">Price New</label>
+            <input autocomplete="off" autofocus class="form-control" name="price_new" placeholder="New Price" type="text">
+        </div>
+
+        <div class="form-group">
+            <label for="price_used">Price Used</label>
+            <input autocomplete="off" autofocus class="form-control" name="price_used" placeholder="Used Price" type="text">
+        </div>
+        <div class="form-group">
+            <label for="stock_new">Number New</label>
+            <input autocomplete="off" autofocus class="form-control" name="stock_new" placeholder="No. of New Books" type="number">
+        </div>
+        <div class="form-group">
+                        <label for="stock_used">Number Used</label>
+            <input autocomplete="off" autofocus class="form-control" name="stock_used" placeholder="No. of Used Books" type="number">
+        </div>
+
+        <button class="btn btn-primary" type="submit">Add Book</button>
+    </form>
+{% endblock %}

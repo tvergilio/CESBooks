@@ -70,7 +70,7 @@ CREATE TABLE transactions
     book_id          text,
     price            real,
     student          text,
-    date             date DEFAULT (CURRENT_DATE)
+    date             TIMESTAMP DEFAULT (CURRENT_TIMESTAMP)
 );
 
 # ----
@@ -120,3 +120,4 @@ COMMIT;
 ALTER TABLE books
 ADD PRIMARY KEY(isbn);
 COMMIT;
+
