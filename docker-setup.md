@@ -22,7 +22,7 @@ docker tag XXXXXXXXXX redyelruc/ces-books:1.1
 docker push redyelruc/ces-books
 
 ## Run container from image stored in Docker Hub
-docker run --publish 80:80  redyelruc/ces-books:1.1
+docker run --publish 80:80 -e DATABASE='mysql://<your_username>:<your_mysql_password>@<your_mysql_hostname>/<your_database_name>' redyelruc/ces-books:1.1
 
 ## To clean old images and containers
 docker system prune -a
