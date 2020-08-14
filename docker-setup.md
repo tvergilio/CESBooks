@@ -2,10 +2,10 @@
 
 ## Using Docker Compose
 1. Create a file called .env and enter the following text:
-```DB_APPLICATION_USER=XXXXXXXXX
-DB_APPLICATION_PASSWORD=XXXXXXXXX
-DB_ROOT_PASSWORD=XXXXXXXXX
-DB_NAME=XXXXXXXXX```
+`DB_APPLICATION_USER=XXXXXXXXX`
+`DB_APPLICATION_PASSWORD=XXXXXXXXX`
+`DB_ROOT_PASSWORD=XXXXXXXXX`
+`DB_NAME=XXXXXXXXX`
 (replace the XXXXXs with credentials)
 2. Run the app and db services:
 `docker-compose up`
