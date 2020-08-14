@@ -3,19 +3,26 @@ version: '2'
 services:
 
   db:
-    image: mysql
+    image: mariadb
     restart: always
     volumes:
         - ./migrations/mysql-migrations.sql:/docker-entrypoint-initdb.d/mysql-migrations.sql
-        - ./db:/var/lib/mysql
+        - ./db:/var/lib/mariadb
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: finance
+      MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_APPLICATION_USER}
       MYSQL_PASSWORD: ${DB_APPLICATION_PASSWORD}
-    ports:
-      - 3306:3306    
-    expose:
-      - "3306"
+    command: --innodb-flush-method=fsync --innodb-use-native-aio=0
 
+  app:
+    image: redyelruc/ces-books:1.1
+    environment:
+      DATABASE: mysql://${DB_APPLICATION_USER}:${DB_APPLICATION_PASSWORD}@db:3306/${DB_NAME}
+    ports:
+      - 80:80  
+    expose:
+      - "80"
+    depends_on:
+      - db
 
