@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+
+  db:
+    image: mysql
+    restart: always
+    volumes:
+        - ./migrations/mysql-migrations.sql:/docker-entrypoint-initdb.d/mysql-migrations.sql
+        - ./db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: finance
+      MYSQL_USER: ${DB_APPLICATION_USER}
+      MYSQL_PASSWORD: ${DB_APPLICATION_PASSWORD}
+    ports:
+      - 3306:3306    
+    expose:
+      - "3306"
+
+
