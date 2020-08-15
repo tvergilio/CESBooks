@@ -7,7 +7,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install apt dependencies
 RUN apt-get update -y
-RUN apt-get install python3-dev default-libmysqlclient-dev gcc  -y
+RUN apt-get install python3-dev python3-psycopg2 gcc  -y
 
 # Copy files into flask directory
 WORKDIR /usr/src/flask_uuid
@@ -16,8 +16,8 @@ COPY . .
 # Install pip dependencies
 RUN pip install -r requirements.txt
 
-# Run
+# Run (Heroku runs as an unprivileged user - uncomment lines below to test locally)
+# RUN useradd -m myuser
+# USER myuser
 CMD ["python","waitress-server.py"]
-
-EXPOSE 80
 

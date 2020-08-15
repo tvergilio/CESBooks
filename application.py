@@ -35,7 +35,7 @@ Session(app)
 
 # Configure CS50 Library to use SQLite database
 #'mysql://<your_username>:<your_mysql_password>@<your_mysql_hostname>/<your_database_name>'
-db = SQL(os.environ['DATABASE'])
+db = SQL(os.environ['DATABASE_URL'])
 
 @app.route("/")
 @login_required

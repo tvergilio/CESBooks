@@ -4,6 +4,5 @@ cs50
 isbnlib
 flask-session
 requests
-mysql-connector-python
-mysqlclient
+psycopg2-binary
 waitress
